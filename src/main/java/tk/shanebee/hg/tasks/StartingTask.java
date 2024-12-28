@@ -22,7 +22,7 @@ public class StartingTask implements Runnable {
     private final Language lang;
 
     public StartingTask(Game g) {
-        this.timer = 30;
+        this.timer = 300; // Set initial timer to 300 seconds
         this.game = g;
         this.lang = HG.getPlugin().getLang();
         String name = g.getGameArenaData().getName();
@@ -39,7 +39,7 @@ public class StartingTask implements Runnable {
 
     @Override
     public void run() {
-        timer-=5;
+        timer -= 5;
 
         if (game.getGameArenaData().getStatus() != Status.COUNTDOWN)
             stop();
@@ -47,22 +47,19 @@ public class StartingTask implements Runnable {
         for (UUID p : game.getGamePlayerData().getPlayers()) {
             Player player = Bukkit.getPlayer(p);
             assert player != null;
-            int health = (int)player.getSaturation();
-            health+= 3;
+            int health = (int) player.getSaturation();
+            health += 3;
             if (health < 20)
                 player.setHealth(health);
         }
 
-
-
         if (timer <= 0) {
-            //clear inventory on game start
-
+            // Clear inventory on game start
             if ((Config.enableleaveitem) || Config.enableforcestartitem)
                 game.getGamePlayerData().getPlayers().forEach(uuid -> {
                     Player player = Bukkit.getPlayer(uuid);
                     assert player != null;
-                    if (player.getInventory().contains(Objects.requireNonNull(Material.getMaterial(Config.forcestartitem)))  || player.getInventory().contains(Objects.requireNonNull(Material.getMaterial(Config.leaveitemtype)))) {
+                    if (player.getInventory().contains(Objects.requireNonNull(Material.getMaterial(Config.forcestartitem))) || player.getInventory().contains(Objects.requireNonNull(Material.getMaterial(Config.leaveitem)))) {
                         player.getInventory().clear();
                     }
                 });
@@ -75,11 +72,14 @@ public class StartingTask implements Runnable {
             game.startFreeRoam();
             stop();
         } else game.getGamePlayerData().msgAll(lang.game_countdown.replace("<timer>", String.valueOf(timer)));
-
     }
 
     public void stop() {
         Bukkit.getScheduler().cancelTask(id);
     }
 
+    // Method to decrease the timer to 30 seconds
+    public void decreaseTimerTo30() {
+        this.timer = 30;
+    }
 }
