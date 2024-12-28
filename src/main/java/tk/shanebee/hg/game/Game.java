@@ -114,6 +114,12 @@ public class Game {
         this.chestDropManager = new ChestDropManager(this);
     }
 
+    public void reduceStartingTimer() {
+    if (starting != null) {
+        starting.decreaseTimerTo30();
+    }
+}
+
     public ChestDropManager getChestDropManager() {
         return chestDropManager;
     }
