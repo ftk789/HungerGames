@@ -31,6 +31,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 	public CommandListener(HG plugin) {
 		this.plugin = plugin;
 		this.playerManager = plugin.getPlayerManager();
+		commands.put("reduceStartingTimer", new reduceStartingTimerCmd());
 	}
 
 	public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
